@@ -59,6 +59,7 @@ public abstract class RabbitEntityMixin extends RabbitEntity_MobEntityMixin
 		return targetY > this.getY() + 0.5;
 	}
 	
+	@SuppressWarnings("javabugs:S6320")
 	@Unique
 	protected RabbitEntity self()
 	{
