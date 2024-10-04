@@ -26,7 +26,7 @@ public abstract class RabbitEntityRabbitMoveControlMixin extends MoveControl
 		cancellable = true)
 	public void tickRespectJumping(final CallbackInfo ci)
 	{
-		// This is required for rabbits not "gliding" over the floor
+		// This is required so that rabbits are not "gliding" over the floor
 		if(this.rabbit.isOnGround()
 			&& !this.rabbit.jumping
 			&& !((RabbitEntity.RabbitJumpControl)this.rabbit.jumpControl).isActive())
