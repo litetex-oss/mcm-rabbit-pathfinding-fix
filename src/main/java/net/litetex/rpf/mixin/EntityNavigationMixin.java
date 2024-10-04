@@ -22,7 +22,7 @@ import net.minecraft.world.World;
 public abstract class EntityNavigationMixin
 {
 	@Unique
-	private static final double DEFAULT_NODE_TIMEOUT = 100.0; // TODO Select good value
+	private static final double DEFAULT_NODE_TIMEOUT = 200.0;
 	
 	/**
 	 * Exactly the same as upstream but ensures that this can never be executed for an infinite time.
