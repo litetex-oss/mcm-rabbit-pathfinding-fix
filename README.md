@@ -16,6 +16,7 @@ As of 1.20.1 there are multiple problems with rabbit pathfinding:
 3. Rabbits are stuck / try to wander around forever.
    * The root cause is that ``EntityNavigation`` sets it's timeouts based on movement speed.<br/>If the movement speed is 0 (this is the case when a rabbit/mob is "stuck"), the timeout is also 0... and if the timeout is 0 it's ignored and therefore it's executed forever (or until interrupted by something external like another goal).
    * Rabbits only have a single goal when idle: ``WanderAround(Far)``. Most other entities also use ``LookAroundGoal``.<br/> Thus the above mentioned infinite navigation is never stopped in favor of executing another goal like in most other mobs.
+   * ``RabbitMoveControl#tick`` constantly updates the rabbits speed (``RabbitEntity#setSpeed``).<br/> While doing this it also indirectly executes ``moveControl#moveTo`` thus the rabbit always tries to reach it's last target even when it shouldn't do that.
 
 
 <!-- modrinth_exclude.start -->
