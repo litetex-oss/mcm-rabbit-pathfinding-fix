@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "rabbit-pathfinding-fix",
   "version": "${version}",
-  "name": "Rabbit Pathfinding Fix",
+  "name": "Rabbit Pathfinding Fixed",
   "description": "Fixes rabbit pathfinding / MC-150224",
   "authors": [
     "litetex"

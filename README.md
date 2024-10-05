@@ -6,7 +6,7 @@
 
 <!-- modrinth_exclude.end -->
 
-# Rabbit Pathfinding Fix
+# Rabbit Pathfinding Fixed
 
 This mod fixes rabbit pathfinding / [MC-150224](https://bugs.mojang.com/browse/MC-150224).
 
