@@ -25,7 +25,7 @@ public abstract class EntityNavigationMixin
 	private static final double DEFAULT_NODE_TIMEOUT = 200.0;
 	
 	/**
-	 * Exactly the same as upstream but ensures that this can never be executed for an infinite time.
+	 * Ensures that navigation can never be executed for an infinite time.
 	 * <p>
 	 * Ensured by setting currentNodeTimeout to a higher value then 0 when there is no movement.
 	 * </p>
@@ -34,57 +34,36 @@ public abstract class EntityNavigationMixin
 	 */
 	@Inject(
 		method = "checkTimeouts",
-		at = @At("HEAD"),
+		at = @At(
+			value = "INVOKE",
+			target = "Lnet/minecraft/entity/ai/pathing/Path;getCurrentNodePos()Lnet/minecraft/util/math/BlockPos;"),
 		cancellable = true
 	)
 	public void checkTimeoutsBreakInfinite(final Vec3d currentPos, final CallbackInfo ci)
 	{
-		if(this.tickCount - this.pathStartTime > 100)
+		final Vec3i vec3i = this.currentPath.getCurrentNodePos();
+		final long currentWorldTime = this.world.getTime();
+		if(vec3i.equals(this.lastNodePosition))
 		{
-			final float f = this.entity.getMovementSpeed() >= 1.0F
-				? this.entity.getMovementSpeed()
-				: this.entity.getMovementSpeed() * this.entity.getMovementSpeed();
-			final float g = f * 100.0F * 0.25F;
-			if(currentPos.squaredDistanceTo(this.pathStartPos) < (g * g))
-			{
-				this.nearPathStartPos = true;
-				this.stop();
-			}
-			else
-			{
-				this.nearPathStartPos = false;
-			}
-			
-			this.pathStartTime = this.tickCount;
-			this.pathStartPos = currentPos;
+			this.currentNodeMs = this.currentNodeMs + (currentWorldTime - this.lastActiveTickMs);
+		}
+		else
+		{
+			this.lastNodePosition = vec3i;
+			// Modification here
+			this.currentNodeTimeout = this.entity.getMovementSpeed() > 0.0F
+				? currentPos.distanceTo(Vec3d.ofBottomCenter(this.lastNodePosition))
+				/ this.entity.getMovementSpeed() * 20.0
+				: DEFAULT_NODE_TIMEOUT;
 		}
 		
-		if(this.currentPath != null && !this.currentPath.isFinished())
+		// Modification here
+		if(this.currentNodeMs > this.currentNodeTimeout * 3.0)
 		{
-			final Vec3i vec3i = this.currentPath.getCurrentNodePos();
-			final long currentWorldTime = this.world.getTime();
-			if(vec3i.equals(this.lastNodePosition))
-			{
-				this.currentNodeMs = this.currentNodeMs + (currentWorldTime - this.lastActiveTickMs);
-			}
-			else
-			{
-				this.lastNodePosition = vec3i;
-				// Modification here
-				this.currentNodeTimeout = this.entity.getMovementSpeed() > 0.0F
-					? currentPos.distanceTo(Vec3d.ofBottomCenter(this.lastNodePosition))
-					/ this.entity.getMovementSpeed() * 20.0
-					: DEFAULT_NODE_TIMEOUT;
-			}
-			
-			// Modification here
-			if(this.currentNodeMs > this.currentNodeTimeout * 3.0)
-			{
-				this.resetNodeAndStop();
-			}
-			
-			this.lastActiveTickMs = currentWorldTime;
+			this.resetNodeAndStop();
 		}
+		
+		this.lastActiveTickMs = currentWorldTime;
 		
 		ci.cancel();
 	}
@@ -99,23 +78,8 @@ public abstract class EntityNavigationMixin
 	}
 	
 	@Shadow
-	protected int tickCount;
-	
-	@Shadow
-	protected int pathStartTime;
-	
-	@Shadow
 	@Final
 	protected MobEntity entity;
-	
-	@Shadow
-	protected Vec3d pathStartPos;
-	
-	@Shadow
-	private boolean nearPathStartPos;
-	
-	@Shadow
-	public abstract void stop();
 	
 	@Shadow
 	@Nullable
