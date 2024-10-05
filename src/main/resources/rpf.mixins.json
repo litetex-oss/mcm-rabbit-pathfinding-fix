@@ -8,6 +8,7 @@
     "RabbitEntity_EntityMixin",
     "RabbitEntity_LivingEntityMixin",
     "RabbitEntity_MobEntityMixin",
+    "RabbitEntityEatCarrotCropGoalMixin",
     "RabbitEntityMixin",
     "RabbitEntityRabbitMoveControlMixin"
   ],
