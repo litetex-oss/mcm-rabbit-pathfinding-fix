@@ -26,6 +26,8 @@ As of 1.20.1 there are multiple problems with rabbit pathfinding:
 3. The goal/behavior is nearly instantly aborted (after a few ticks) due to incorrect implementation of ``shouldContinue`` and ``isTargetPos`` methods which abort the goal when the rabbit selected a target crop block.
 
 
+Detailed [video comparisons](./assets/comparison/) are also available.
+
 <!-- modrinth_exclude.start -->
 
 ## Installation
