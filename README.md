@@ -25,7 +25,7 @@ As of 1.20.1 there are multiple problems with rabbit pathfinding:
 2. Rabbits instantly eat the crop while still jumping.
 3. The goal/behavior is immediately aborted (after a few ticks - when a target crop block was selected) due to incorrect implementation of ``shouldContinue`` and ``isTargetPos`` methods.
 
-Detailed [video comparisons](./assets/comparison/) are also available.
+Detailed [video comparisons](https://litetex-oss.github.io/mcm-rabbit-pathfinding-fix/assets/comparison) are also available.
 
 <!-- modrinth_exclude.start -->
 
