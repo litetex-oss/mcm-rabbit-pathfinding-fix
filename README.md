@@ -4,11 +4,11 @@
 [![Build](https://img.shields.io/github/actions/workflow/status/litetex-oss/mcm-rabbit-pathfinding-fix/check-build.yml?branch=dev)](https://github.com/litetex-oss/mcm-rabbit-pathfinding-fix/actions/workflows/check-build.yml?query=branch%3Adev)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=litetex-oss_mcm-rabbit-pathfinding-fix&metric=alert_status)](https://sonarcloud.io/dashboard?id=litetex-oss_mcm-rabbit-pathfinding-fix)
 
-<!-- modrinth_exclude.end -->
-
 # Rabbit Pathfinding Fixed
 
-This mod fixes rabbit pathfinding / [MC-150224](https://bugs.mojang.com/browse/MC-150224).
+<!-- modrinth_exclude.end -->
+
+Fixes rabbit pathfinding / [MC-150224](https://bugs.mojang.com/browse/MC-150224).
 
 As of 1.20.1 there are multiple problems with rabbit pathfinding:
 
