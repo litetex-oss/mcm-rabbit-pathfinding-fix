@@ -23,8 +23,7 @@ As of 1.20.1 there are multiple problems with rabbit pathfinding:
 ### Eating carrot crops
 1. Rabbits can't reach the crops and always stop one block short of them.<br/>This is due to selecting the incorrect distance from the crop block (it's ``1`` but should be ``0``).
 2. Rabbits instantly eat the crop while still jumping.
-3. The goal/behavior is nearly instantly aborted (after a few ticks) due to incorrect implementation of ``shouldContinue`` and ``isTargetPos`` methods which abort the goal when the rabbit selected a target crop block.
-
+3. The goal/behavior is immediately aborted (after a few ticks - when a target crop block was selected) due to incorrect implementation of ``shouldContinue`` and ``isTargetPos`` methods.
 
 Detailed [video comparisons](./assets/comparison/) are also available.
 
