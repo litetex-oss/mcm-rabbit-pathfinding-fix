@@ -14,7 +14,7 @@ As of 1.20.1 there are multiple problems with rabbit pathfinding:
 
 ### Basic pathfinding
 1. The calculation of the jump height/velocity is incorrect and poorly implemented.<br/>This results in too small jumps for climbing over a block.
-2. Rabbits "stall" (no horizontal movement) during jumps - due to this they just jump upwards in the same place when trying to climb a block.<br/>This behavior is caused by ``RabbitMoveControl`` which only sets the (horizontal) speed correctly during movement and not while jumping.
+2. Rabbits "stall" (no horizontal movement) during jumps - due to this they just jump upwards in the same place when trying to climb a block.<br/>This behavior is caused by ``RabbitMoveControl`` which only sets the (horizontal) speed correctly during movement but not while jumping.
 3. Rabbits are stuck / try to wander around forever.
    * The root cause is that ``EntityNavigation`` sets it's timeouts based on movement speed.<br/>If the movement speed is 0 (this is the case when a rabbit/mob is "stuck"), the timeout is also 0... and if the timeout is 0 it's ignored and therefore it's executed forever (or until interrupted by something external like another goal).
    * Rabbits only have a single goal when idle: ``WanderAround(Far)``. Most other entities also use ``LookAroundGoal``.<br/> Thus the above mentioned infinite navigation is never stopped in favor of executing another goal like in most other mobs.
