@@ -22,7 +22,7 @@ As of 1.20.1 there are multiple problems with rabbit pathfinding:
 
 ### Eating carrot crops
 1. Rabbits can't reach the crops and always stop one block short of them.<br/>This is due to selecting the incorrect distance from the crop block (it's ``1`` but should be ``0``).
-2. Rabbits instantly eat the crop while still jumping.
+2. Rabbits eat the crop instantly even while still jumping and being in the air.
 3. The goal/behavior is immediately aborted (after a few ticks - when a target crop block was selected) due to incorrect implementation of ``shouldContinue`` and ``isTargetPos`` methods.
 
 Detailed [video comparisons](https://litetex-oss.github.io/mcm-rabbit-pathfinding-fix/assets/comparison) are also available.
