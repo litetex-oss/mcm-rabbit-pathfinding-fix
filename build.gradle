@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.8.6'
+    id 'fabric-loom' version '1.8.10'
     id 'maven-publish'
     id 'checkstyle'
     id 'org.sonarqube' version '5.1.0.4882'
@@ -20,7 +20,7 @@ base {
 }
 
 loom {
-    accessWidenerPath = file("src/main/resources/rpf.accesswidener")
+    accessWidenerPath = file("src/main/resources/mod.accesswidener")
 }
 
 // https://github.com/gradle/gradle/issues/27035

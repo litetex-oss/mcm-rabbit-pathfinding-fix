@@ -23,6 +23,8 @@ public abstract class EntityNavigationMixin
 {
 	@Unique
 	private static final double DEFAULT_NODE_TIMEOUT = 200.0;
+	@Unique
+	private static final double MAX_NODE_TIMEOUT = 4000.0;
 	
 	/**
 	 * Ensures that navigation can never be executed for an infinite time.
@@ -50,14 +52,15 @@ public abstract class EntityNavigationMixin
 		else
 		{
 			this.lastNodePosition = vec3i;
-			// Modification here
 			this.currentNodeTimeout = this.entity.getMovementSpeed() > 0.0F
-				? currentPos.distanceTo(Vec3d.ofBottomCenter(this.lastNodePosition))
-				/ this.entity.getMovementSpeed() * 20.0
-				: DEFAULT_NODE_TIMEOUT;
+				? Math.min(
+				currentPos.distanceTo(Vec3d.ofBottomCenter(this.lastNodePosition)) / this.entity.getMovementSpeed()
+					* 20.0,
+				MAX_NODE_TIMEOUT) // Set a max timeout to handle situations where movement speed is near zero
+				: DEFAULT_NODE_TIMEOUT; // Always set a timeout > 0 when speed is 0
 		}
 		
-		// Modification here
+		// Ignore currentNodeTimeout != 0
 		if(this.currentNodeMs > this.currentNodeTimeout * 3.0)
 		{
 			this.resetNodeAndStop();
