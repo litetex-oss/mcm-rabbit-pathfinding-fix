@@ -1,9 +1,16 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "net.litetex.template-placeholder.mixin",
+  "package": "net.litetex.rpf.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "EntityNavigationMixin",
+    "RabbitEntity_EntityMixin",
+    "RabbitEntity_LivingEntityMixin",
+    "RabbitEntity_MobEntityMixin",
+    "RabbitEntityEatCarrotCropGoalMixin",
+    "RabbitEntityMixin",
+    "RabbitEntityRabbitMoveControlMixin"
   ],
   "injectors": {
     "defaultRequire": 1
