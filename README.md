@@ -8,7 +8,7 @@
 
 <!-- modrinth_exclude.end -->
 
-Fixes rabbit pathfinding / [MC-150224](https://bugs.mojang.com/browse/MC-150224).
+Fixes rabbit pathfinding efficiently.
 
 As of 1.20.1 there are multiple problems with rabbit pathfinding:
 
@@ -20,10 +20,15 @@ As of 1.20.1 there are multiple problems with rabbit pathfinding:
    * Rabbits only have a single goal when idle: ``WanderAround(Far)``. Most other entities also use ``LookAroundGoal``.<br/> Thus the above mentioned infinite navigation is never stopped in favor of executing another goal like in most other mobs.
    * ``RabbitMoveControl#tick`` constantly updates the rabbits speed (``RabbitEntity#setSpeed``).<br/> While doing this it also indirectly executes ``moveControl#moveTo`` thus the rabbit always tries to reach it's last target even when it shouldn't do that.
 
+> [!NOTE]
+> As of ``1.20.4/24w46a`` [MC-150224](https://bugs.mojang.com/browse/MC-150224) was fixed, correcting the jump height (1) and fixing the stall (2).<br/>
+> However all other parts - including optimizations and sanity checks in above mentioned fixes - are still missing.
+
 ### Eating carrot crops
 1. Rabbits can't reach the crops and always stop one block short of them.<br/>This is due to selecting the incorrect distance from the crop block (it's ``1`` but should be ``0``).
 2. Rabbits eat the crop instantly even while still jumping and being in the air.
 3. The goal/behavior is immediately aborted (after a few ticks - when a target crop block was selected) due to incorrect implementation of ``shouldContinue`` and ``isTargetPos`` methods.
+
 
 Detailed [video comparisons](https://litetex-oss.github.io/mcm-rabbit-pathfinding-fix/assets/comparison) are also available.
 
