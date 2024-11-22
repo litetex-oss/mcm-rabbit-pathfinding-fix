@@ -1,3 +1,6 @@
+# 1.0.2
+* Fix "Non-unique Mixin config name mod.mixins.json used by the mods"
+
 # 1.0.1
 * Updated to 1.20.2
 * EntityNavigation: Ensure that ``currentNodeTimeout`` doesn't exceeds a maximum value

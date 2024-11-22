@@ -16,9 +16,9 @@
   "icon": "assets/icon.png",
   "environment": "*",
   "mixins": [
-    "mcm-rabbit-pathfinding-fix.mixins.json"
+    "rabbit-pathfinding-fix.mixins.json"
   ],
-  "accessWidener": "mcm-rabbit-pathfinding-fix.accesswidener",
+  "accessWidener": "rabbit-pathfinding-fix.accesswidener",
   "recommends": {
     "fabricloader": ">=${loader_version}",
     "minecraft": "~${minecraft_version}"
