@@ -1,3 +1,6 @@
+# 1.0.3
+* Updated to 1.20.4
+
 # 1.0.2
 * Fix "Non-unique Mixin config name mod.mixins.json used by the mods"
 
