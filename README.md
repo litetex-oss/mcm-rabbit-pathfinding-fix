@@ -10,7 +10,7 @@
 
 Fixes rabbit pathfinding efficiently.
 
-As of 1.20.1 there are multiple problems with rabbit pathfinding:
+As of 1.21.1 there are multiple problems with rabbit pathfinding:
 
 ### Basic pathfinding
 1. The calculation of the jump height/velocity is incorrect and poorly implemented.<br/>This results in too small jumps for climbing over a block.
@@ -22,7 +22,7 @@ As of 1.20.1 there are multiple problems with rabbit pathfinding:
 
 <!-- modrinth_exclude.start -->
 > [!NOTE]<!-- modrinth_exclude.end -->
-> As of ``1.20.4/24w46a`` [MC-150224](https://bugs.mojang.com/browse/MC-150224) was fixed, correcting the jump height (1) and fixing the stall (2).<br/>
+> As of ``1.21.4/24w46a`` [MC-150224](https://bugs.mojang.com/browse/MC-150224) was fixed, correcting the jump height (1) and fixing the stall (2).<br/>
 > However all other parts - including optimizations and sanity checks in above mentioned fixes - are still missing.
 
 ### Eating carrot crops
