@@ -20,7 +20,8 @@ As of 1.20.1 there are multiple problems with rabbit pathfinding:
    * Rabbits only have a single goal when idle: ``WanderAround(Far)``. Most other entities also use ``LookAroundGoal``.<br/> Thus the above mentioned infinite navigation is never stopped in favor of executing another goal like in most other mobs.
    * ``RabbitMoveControl#tick`` constantly updates the rabbits speed (``RabbitEntity#setSpeed``).<br/> While doing this it also indirectly executes ``moveControl#moveTo`` thus the rabbit always tries to reach it's last target even when it shouldn't do that.
 
-> [!NOTE]
+<!-- modrinth_exclude.start -->
+> [!NOTE]<!-- modrinth_exclude.end -->
 > As of ``1.20.4/24w46a`` [MC-150224](https://bugs.mojang.com/browse/MC-150224) was fixed, correcting the jump height (1) and fixing the stall (2).<br/>
 > However all other parts - including optimizations and sanity checks in above mentioned fixes - are still missing.
 
