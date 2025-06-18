@@ -52,10 +52,10 @@ public abstract class EntityNavigationMixin
 		else
 		{
 			this.lastNodePosition = vec3i;
-			this.currentNodeTimeout = this.entity.getMovementSpeed() > 0.0F
+			final float movementSpeed = this.entity.getMovementSpeed();
+			this.currentNodeTimeout = movementSpeed > 0.0F
 				? Math.min(
-				currentPos.distanceTo(Vec3d.ofBottomCenter(this.lastNodePosition)) / this.entity.getMovementSpeed()
-					* 20.0,
+				currentPos.distanceTo(Vec3d.ofBottomCenter(this.lastNodePosition)) / movementSpeed * 20.0,
 				MAX_NODE_TIMEOUT) // Set a max timeout to handle situations where movement speed is near zero
 				: DEFAULT_NODE_TIMEOUT; // Always set a timeout > 0 when speed is 0
 		}

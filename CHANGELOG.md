@@ -1,3 +1,7 @@
+# 1.0.5
+* Updated to 1.21.6
+* Minor code improvements and optimizations
+
 # 1.0.4
 * Updated to 1.21.5
 
