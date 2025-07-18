@@ -13,4 +13,10 @@ public abstract class RabbitEntity_EntityMixin
 	
 	@Shadow
 	public boolean horizontalCollision;
+	
+	@Shadow
+	protected float getJumpVelocityMultiplier()
+	{
+		return 0F;
+	}
 }
