@@ -11,7 +11,7 @@ import net.minecraft.entity.ai.pathing.EntityNavigation;
 
 @SuppressWarnings({"checkstyle:VisibilityModifier", "checkstyle:TypeName", "java:S101"})
 @Mixin(net.minecraft.entity.mob.MobEntity.class)
-public abstract class RabbitEntity_MobEntityMixin extends RabbitEntity_LivingEntityMixin
+public abstract class RabbitEntity_MobEntityMixin extends RabbitEntity_EntityMixin
 {
 	@Shadow
 	@Final

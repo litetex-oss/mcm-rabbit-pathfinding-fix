@@ -14,6 +14,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CarrotsBlock;
 import net.minecraft.entity.ai.goal.MoveToTargetPosGoal;
+import net.minecraft.entity.ai.pathing.EntityNavigation;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.passive.RabbitEntity;
 import net.minecraft.util.math.BlockPos;
@@ -32,13 +33,14 @@ public abstract class RabbitEntityEatCarrotCropGoalMixin extends MoveToTargetPos
 	@Override
 	protected void startMovingToTarget()
 	{
-		this.mob.getNavigation()
-			.startMovingTo(
+		final EntityNavigation nav = this.mob.getNavigation();
+		nav.startMovingAlong(
+			nav.findPathTo(
 				this.targetPos.getX() + 0.5,
 				this.targetPos.getY() + 1.0,
 				this.targetPos.getZ() + 0.5,
-				0, // This is 1 in the defaults
-				this.speed);
+				1),
+			this.speed);
 	}
 	
 	/**
@@ -80,8 +82,8 @@ public abstract class RabbitEntityEatCarrotCropGoalMixin extends MoveToTargetPos
 	@Inject(
 		method = "tick",
 		at = @At(
-			value = "INVOKE",
-			target = "Lnet/minecraft/entity/passive/RabbitEntity;getWorld()Lnet/minecraft/world/World;"
+			value = "FIELD",
+			target = "Lnet/minecraft/entity/passive/RabbitEntity;world:Lnet/minecraft/world/World;"
 		),
 		cancellable = true
 	)
