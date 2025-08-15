@@ -3,6 +3,8 @@ _This is a "one-shot" legacy version_
 
 It should work for 1.20.
 
+Thanks to @murphy-slaw for noticing and providing code.
+
 # 1.0.6-legacy+1.18
 _This is a "one-shot" legacy version_
 
