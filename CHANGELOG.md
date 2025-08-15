@@ -1,3 +1,8 @@
+# 1.0.6-legacy+1.20
+_This is a "one-shot" legacy version_
+
+It should work for 1.20.
+
 # 1.0.6-legacy+1.18
 _This is a "one-shot" legacy version_
 

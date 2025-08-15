@@ -50,7 +50,7 @@ public abstract class RabbitEntityMixin extends RabbitEntity_MobEntityMixin
 			}
 		}
 		
-		cir.setReturnValue(this.getJumpVelocity(f / 0.42F));
+		cir.setReturnValue(f + this.getJumpBoostVelocityModifier());
 	}
 	
 	@Unique
