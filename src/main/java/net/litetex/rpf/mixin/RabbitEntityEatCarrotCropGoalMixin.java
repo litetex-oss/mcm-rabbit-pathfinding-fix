@@ -83,7 +83,7 @@ public abstract class RabbitEntityEatCarrotCropGoalMixin extends MoveToTargetPos
 		method = "tick",
 		at = @At(
 			value = "INVOKE",
-			target = "Lnet/minecraft/entity/passive/RabbitEntity;getWorld()Lnet/minecraft/world/World;"
+			target = "Lnet/minecraft/util/math/BlockPos;up()Lnet/minecraft/util/math/BlockPos;"
 		),
 		cancellable = true
 	)
