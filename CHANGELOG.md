@@ -1,7 +1,9 @@
 # 1.0.6.1-legacy+1.20
 _This is a "one-shot" legacy version_
 
-Fix failing mixin injection in `RabbitEntityEatCarrotCropGoalMixin` #114
+It should work for 1.20.
+
+* Fix failing mixin injection in `RabbitEntityEatCarrotCropGoalMixin` in previous version #114
 
 Thanks to @murphy-slaw for noticing and providing code.
 
