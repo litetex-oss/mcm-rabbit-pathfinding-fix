@@ -53,7 +53,7 @@ public abstract class RabbitEntityEatCarrotCropGoalMixin extends MoveToTargetPos
 	public void tickSuperRedirect(final MoveToTargetPosGoal instance)
 	{
 		final BlockPos blockPos = this.getTargetPos();
-		if(!blockPos.isWithinDistance(this.mob.getPos(), this.getDesiredDistanceToTarget()))
+		if(!blockPos.isWithinDistance(this.mob.getEntityPos(), this.getDesiredDistanceToTarget()))
 		{
 			this.reached = false;
 			this.tryingTime++;
@@ -81,7 +81,7 @@ public abstract class RabbitEntityEatCarrotCropGoalMixin extends MoveToTargetPos
 		method = "tick",
 		at = @At(
 			value = "INVOKE",
-			target = "Lnet/minecraft/entity/passive/RabbitEntity;getWorld()Lnet/minecraft/world/World;"
+			target = "Lnet/minecraft/entity/passive/RabbitEntity;getEntityWorld()Lnet/minecraft/world/World;"
 		),
 		cancellable = true
 	)
