@@ -1,3 +1,6 @@
+# 1.0.7
+* Updated to 1.21.9
+
 # 1.0.6-legacy+1.20
 _This is a "one-shot" legacy version_
 
