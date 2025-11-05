@@ -1,5 +1,18 @@
+# 1.0.8
+* Updated to 1.21.10
+* Use "official" mappings
+
 # 1.0.7
 * Updated to 1.21.9
+
+# 1.0.6.1-legacy+1.20
+_This is a "one-shot" legacy version_
+
+It should work for 1.20.
+
+* Fix failing mixin injection in `RabbitEntityEatCarrotCropGoalMixin` in previous version #114
+
+Thanks to @murphy-slaw for noticing and providing code.
 
 # 1.0.6-legacy+1.20
 _This is a "one-shot" legacy version_

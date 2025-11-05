@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.Shadow;
 
 
 @SuppressWarnings({"checkstyle:VisibilityModifier", "checkstyle:TypeName", "java:S101"})
-@Mixin(net.minecraft.entity.Entity.class)
+@Mixin(net.minecraft.world.entity.Entity.class)
 public abstract class RabbitEntity_EntityMixin
 {
 	@Shadow

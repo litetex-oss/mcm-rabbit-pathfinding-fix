@@ -7,13 +7,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import net.minecraft.entity.ai.goal.LookAroundGoal;
-import net.minecraft.entity.ai.pathing.Path;
-import net.minecraft.entity.passive.RabbitEntity;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.animal.Rabbit;
+import net.minecraft.world.level.pathfinder.Path;
 
 
 @SuppressWarnings("checkstyle:MagicNumber")
-@Mixin(RabbitEntity.class)
+@Mixin(Rabbit.class)
 public abstract class RabbitEntityMixin extends RabbitEntity_MobEntityMixin
 {
 	/**
@@ -23,34 +23,34 @@ public abstract class RabbitEntityMixin extends RabbitEntity_MobEntityMixin
 	 * </p>
 	 */
 	@Inject(
-		method = "getJumpVelocity",
+		method = "getJumpPower",
 		at = @At("HEAD"),
 		cancellable = true)
 	public void getJumpVelocityOptimized(final CallbackInfoReturnable<Float> cir)
 	{
 		final float f;
 		if(this.horizontalCollision
-			|| this.moveControl.isMoving()
-			&& this.isYRequiringJump(this.moveControl.getTargetY()))
+			|| this.moveControl.hasWanted()
+			&& this.isYRequiringJump(this.moveControl.getWantedY()))
 		{
 			f = 0.5F;
 		}
 		else
 		{
-			final Path path = this.navigation.getCurrentPath();
+			final Path path = this.navigation.getPath();
 			if(path != null
-				&& !path.isFinished()
-				&& this.isYRequiringJump(path.getNodePosition(this.self()).y))
+				&& !path.isDone()
+				&& this.isYRequiringJump(path.getNextEntityPos(this.self()).y))
 			{
 				f = 0.5F;
 			}
 			else
 			{
-				f = this.moveControl.getSpeed() <= 0.6 ? 0.2F : 0.3F;
+				f = this.moveControl.getSpeedModifier() <= 0.6 ? 0.2F : 0.3F;
 			}
 		}
 		
-		cir.setReturnValue(this.getJumpVelocity(f / 0.42F));
+		cir.setReturnValue(this.getJumpPower(f / 0.42F));
 	}
 	
 	@Unique
@@ -61,9 +61,9 @@ public abstract class RabbitEntityMixin extends RabbitEntity_MobEntityMixin
 	
 	@SuppressWarnings("javabugs:S6320")
 	@Unique
-	protected RabbitEntity self()
+	protected Rabbit self()
 	{
-		return (RabbitEntity)(Object)this;
+		return (Rabbit)(Object)this;
 	}
 	
 	/**
@@ -74,10 +74,10 @@ public abstract class RabbitEntityMixin extends RabbitEntity_MobEntityMixin
 	 * </p>
 	 */
 	@Inject(
-		method = "initGoals",
+		method = "registerGoals",
 		at = @At("TAIL"))
 	protected void initGoalsAddLookAroundGoal(final CallbackInfo ci)
 	{
-		this.goalSelector.add(12, new LookAroundGoal(this.self()));
+		this.goalSelector.addGoal(12, new RandomLookAroundGoal(this.self()));
 	}
 }

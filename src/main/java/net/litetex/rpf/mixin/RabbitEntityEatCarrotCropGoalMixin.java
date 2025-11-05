@@ -10,19 +10,19 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.CarrotsBlock;
-import net.minecraft.entity.ai.goal.MoveToTargetPosGoal;
-import net.minecraft.entity.mob.PathAwareEntity;
-import net.minecraft.entity.passive.RabbitEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldView;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.goal.MoveToBlockGoal;
+import net.minecraft.world.entity.animal.Rabbit;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CarrotBlock;
+import net.minecraft.world.level.block.state.BlockState;
 
 
 @SuppressWarnings("checkstyle:MagicNumber")
-@Mixin(RabbitEntity.EatCarrotCropGoal.class)
-public abstract class RabbitEntityEatCarrotCropGoalMixin extends MoveToTargetPosGoal
+@Mixin(Rabbit.RaidGardenGoal.class)
+public abstract class RabbitEntityEatCarrotCropGoalMixin extends MoveToBlockGoal
 {
 	// region Move into carrots to eat
 	
@@ -30,43 +30,43 @@ public abstract class RabbitEntityEatCarrotCropGoalMixin extends MoveToTargetPos
 	 * A rabbits needs to be inside the carrots to be able to eat them!
 	 */
 	@Override
-	protected void startMovingToTarget()
+	protected void moveMobToBlock()
 	{
 		this.mob.getNavigation()
-			.startMovingTo(
-				this.targetPos.getX() + 0.5,
-				this.targetPos.getY() + 1.0,
-				this.targetPos.getZ() + 0.5,
+			.moveTo(
+				this.blockPos.getX() + 0.5,
+				this.blockPos.getY() + 1.0,
+				this.blockPos.getZ() + 0.5,
 				0, // This is 1 in the defaults
-				this.speed);
+				this.speedModifier);
 	}
 	
 	/**
-	 * Same code fix as {@link #startMovingToTarget()} above
+	 * Same code fix as {@link #moveMobToBlock()} above
 	 */
 	@Redirect(
 		method = "tick",
 		at = @At(
 			value = "INVOKE",
-			target = "Lnet/minecraft/entity/ai/goal/MoveToTargetPosGoal;tick()V")
+			target = "Lnet/minecraft/world/entity/ai/goal/MoveToBlockGoal;tick()V")
 	)
-	public void tickSuperRedirect(final MoveToTargetPosGoal instance)
+	public void tickSuperRedirect(final MoveToBlockGoal instance)
 	{
-		final BlockPos blockPos = this.getTargetPos();
-		if(!blockPos.isWithinDistance(this.mob.getEntityPos(), this.getDesiredDistanceToTarget()))
+		final BlockPos blockPos = this.getMoveToTarget();
+		if(!blockPos.closerToCenterThan(this.mob.position(), this.acceptedDistance()))
 		{
-			this.reached = false;
-			this.tryingTime++;
-			if(this.shouldResetPath())
+			this.reachedTarget = false;
+			this.tryTicks++;
+			if(this.shouldRecalculatePath())
 			{
 				// Call fixed method
-				this.startMovingToTarget();
+				this.moveMobToBlock();
 			}
 		}
 		else
 		{
-			this.reached = true;
-			this.tryingTime--;
+			this.reachedTarget = true;
+			this.tryTicks--;
 		}
 	}
 	
@@ -81,7 +81,7 @@ public abstract class RabbitEntityEatCarrotCropGoalMixin extends MoveToTargetPos
 		method = "tick",
 		at = @At(
 			value = "INVOKE",
-			target = "Lnet/minecraft/entity/passive/RabbitEntity;getEntityWorld()Lnet/minecraft/world/World;"
+			target = "Lnet/minecraft/world/entity/animal/Rabbit;level()Lnet/minecraft/world/level/Level;"
 		),
 		cancellable = true
 	)
@@ -111,32 +111,32 @@ public abstract class RabbitEntityEatCarrotCropGoalMixin extends MoveToTargetPos
 	// endregion
 	
 	/**
-	 * isTargetPos always returns <code>false</code> when called by {@link #shouldContinue()}. <br/> Even when there
+	 * isTargetPos always returns <code>false</code> when called by {@link #canContinueToUse()}. <br/> Even when there
 	 * would be a valid target due to checking for <code>!hasTarget</code>. <br/>
 	 * <code>hasTarget</code> is always set to <code>true</code> at this point, exiting the method with
 	 * <code>false</code>.
 	 */
 	@Inject(
-		method = "isTargetPos",
+		method = "isValidTarget",
 		at = @At("HEAD"),
 		cancellable = true
 	)
 	public void isTargetPosDoNotAbortWhenHavingTarget(
-		final WorldView world,
+		final LevelReader world,
 		final BlockPos pos,
 		final CallbackInfoReturnable<Boolean> cir)
 	{
-		if(!this.wantsCarrots)
+		if(!this.wantsToRaid)
 		{
 			cir.setReturnValue(false);
 			return;
 		}
 		
 		BlockState blockState = world.getBlockState(pos);
-		if(blockState.isOf(Blocks.FARMLAND))
+		if(blockState.is(Blocks.FARMLAND))
 		{
-			blockState = world.getBlockState(pos.up());
-			if(blockState.getBlock() instanceof final CarrotsBlock carrotsBlock && carrotsBlock.isMature(blockState))
+			blockState = world.getBlockState(pos.above());
+			if(blockState.getBlock() instanceof final CarrotBlock carrotsBlock && carrotsBlock.isMaxAge(blockState))
 			{
 				cir.setReturnValue(true);
 				return;
@@ -150,15 +150,15 @@ public abstract class RabbitEntityEatCarrotCropGoalMixin extends MoveToTargetPos
 	 * Set <code>hasTarget</code> in correct method
 	 */
 	@Override
-	protected boolean findTargetPos()
+	protected boolean findNearestBlock()
 	{
-		final boolean foundTarget = super.findTargetPos();
-		this.hasTarget = foundTarget;
+		final boolean foundTarget = super.findNearestBlock();
+		this.canRaid = foundTarget;
 		return foundTarget;
 	}
 	
 	protected RabbitEntityEatCarrotCropGoalMixin(
-		final PathAwareEntity mob,
+		final PathfinderMob mob,
 		final double speed,
 		final int range)
 	{
@@ -166,12 +166,12 @@ public abstract class RabbitEntityEatCarrotCropGoalMixin extends MoveToTargetPos
 	}
 	
 	@Shadow
-	private boolean wantsCarrots;
+	private boolean wantsToRaid;
 	
 	@Shadow
-	private boolean hasTarget;
+	private boolean canRaid;
 	
 	@Shadow
 	@Final
-	private RabbitEntity rabbit;
+	private Rabbit rabbit;
 }
