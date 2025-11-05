@@ -8,11 +8,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import net.minecraft.entity.ai.control.MoveControl;
-import net.minecraft.entity.passive.RabbitEntity;
+import net.minecraft.world.entity.ai.control.MoveControl;
+import net.minecraft.world.entity.animal.Rabbit;
 
 
-@Mixin(RabbitEntity.RabbitMoveControl.class)
+@Mixin(Rabbit.RabbitMoveControl.class)
 public abstract class RabbitEntityRabbitMoveControlMixin extends MoveControl
 {
 	/**
@@ -28,17 +28,17 @@ public abstract class RabbitEntityRabbitMoveControlMixin extends MoveControl
 	public void tickRespectJumping(final CallbackInfo ci)
 	{
 		// This is required so that rabbits are not "gliding" over the floor
-		if(this.rabbit.isOnGround()
+		if(this.rabbit.onGround()
 			&& !this.rabbit.jumping
-			&& !((RabbitEntity.RabbitJumpControl)this.rabbit.jumpControl).isActive())
+			&& !((Rabbit.RabbitJumpControl)this.rabbit.jumpControl).wantJump())
 		{
 			this.setSpeedToRabbit(0.0);
 		}
-		else if(this.isMoving()
+		else if(this.hasWanted()
 			// Change the speed when the rabbit is jumping to prevent "stalling"
-			|| this.state == MoveControl.State.JUMPING)
+			|| this.operation == MoveControl.Operation.JUMPING)
 		{
-			this.setSpeedToRabbit(this.rabbitSpeed);
+			this.setSpeedToRabbit(this.nextJumpSpeed);
 		}
 		
 		super.tick();
@@ -53,21 +53,21 @@ public abstract class RabbitEntityRabbitMoveControlMixin extends MoveControl
 		// The setSpeed method is otherwise constantly fired which also internally executes moveControl.moveTo
 		// and thus the rabbit tries to move to the last selected target even when it's current goal
 		// (e.g. WanderAround) has been stopped
-		if(this.rabbit.getNavigation().speed != speed)
+		if(this.rabbit.getNavigation().speedModifier != speed)
 		{
-			this.rabbit.setSpeed(speed);
+			this.rabbit.setSpeedModifier(speed);
 		}
 	}
 	
-	protected RabbitEntityRabbitMoveControlMixin(final RabbitEntity owner)
+	protected RabbitEntityRabbitMoveControlMixin(final Rabbit owner)
 	{
 		super(owner);
 	}
 	
 	@Shadow
 	@Final
-	private RabbitEntity rabbit;
+	private Rabbit rabbit;
 	
 	@Shadow
-	private double rabbitSpeed;
+	private double nextJumpSpeed;
 }

@@ -9,16 +9,16 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import net.minecraft.entity.ai.pathing.EntityNavigation;
-import net.minecraft.entity.ai.pathing.Path;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.World;
+import net.minecraft.core.Vec3i;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.phys.Vec3;
 
 
 @SuppressWarnings("checkstyle:MagicNumber")
-@Mixin(EntityNavigation.class)
+@Mixin(PathNavigation.class)
 public abstract class EntityNavigationMixin
 {
 	@Unique
@@ -35,75 +35,75 @@ public abstract class EntityNavigationMixin
 	 * @see #resetNodeBreakInfinite(CallbackInfo)
 	 */
 	@Inject(
-		method = "checkTimeouts",
+		method = "doStuckDetection",
 		at = @At(
 			value = "INVOKE",
-			target = "Lnet/minecraft/entity/ai/pathing/Path;getCurrentNodePos()Lnet/minecraft/util/math/BlockPos;"),
+			target = "Lnet/minecraft/world/level/pathfinder/Path;getNextNodePos()Lnet/minecraft/core/BlockPos;"),
 		cancellable = true
 	)
-	public void checkTimeoutsBreakInfinite(final Vec3d currentPos, final CallbackInfo ci)
+	public void checkTimeoutsBreakInfinite(final Vec3 currentPos, final CallbackInfo ci)
 	{
-		final Vec3i vec3i = this.currentPath.getCurrentNodePos();
-		final long currentWorldTime = this.world.getTime();
-		if(vec3i.equals(this.lastNodePosition))
+		final Vec3i vec3i = this.path.getNextNodePos();
+		final long currentWorldTime = this.level.getGameTime();
+		if(vec3i.equals(this.timeoutCachedNode))
 		{
-			this.currentNodeMs = this.currentNodeMs + (currentWorldTime - this.lastActiveTickMs);
+			this.timeoutTimer = this.timeoutTimer + (currentWorldTime - this.lastTimeoutCheck);
 		}
 		else
 		{
-			this.lastNodePosition = vec3i;
-			final float movementSpeed = this.entity.getMovementSpeed();
-			this.currentNodeTimeout = movementSpeed > 0.0F
+			this.timeoutCachedNode = vec3i;
+			final float movementSpeed = this.mob.getSpeed();
+			this.timeoutLimit = movementSpeed > 0.0F
 				? Math.min(
-				currentPos.distanceTo(Vec3d.ofBottomCenter(this.lastNodePosition)) / movementSpeed * 20.0,
+				currentPos.distanceTo(Vec3.atBottomCenterOf(this.timeoutCachedNode)) / movementSpeed * 20.0,
 				MAX_NODE_TIMEOUT) // Set a max timeout to handle situations where movement speed is near zero
 				: DEFAULT_NODE_TIMEOUT; // Always set a timeout > 0 when speed is 0
 		}
 		
 		// Ignore currentNodeTimeout != 0
-		if(this.currentNodeMs > this.currentNodeTimeout * 3.0)
+		if(this.timeoutTimer > this.timeoutLimit * 3.0)
 		{
-			this.resetNodeAndStop();
+			this.timeoutPath();
 		}
 		
-		this.lastActiveTickMs = currentWorldTime;
+		this.lastTimeoutCheck = currentWorldTime;
 		
 		ci.cancel();
 	}
 	
 	@Inject(
-		method = "resetNode",
+		method = "resetStuckTimeout",
 		at = @At("TAIL")
 	)
 	public void resetNodeBreakInfinite(final CallbackInfo ci)
 	{
-		this.currentNodeTimeout = DEFAULT_NODE_TIMEOUT;
+		this.timeoutLimit = DEFAULT_NODE_TIMEOUT;
 	}
 	
 	@Shadow
 	@Final
-	protected MobEntity entity;
+	protected Mob mob;
 	
 	@Shadow
 	@Nullable
-	protected Path currentPath;
+	protected Path path;
 	
 	@Shadow
 	@Final
-	protected World world;
+	protected Level level;
 	
 	@Shadow
-	protected Vec3i lastNodePosition;
+	protected Vec3i timeoutCachedNode;
 	
 	@Shadow
-	protected long currentNodeMs;
+	protected long timeoutTimer;
 	
 	@Shadow
-	protected long lastActiveTickMs;
+	protected long lastTimeoutCheck;
 	
 	@Shadow
-	protected double currentNodeTimeout;
+	protected double timeoutLimit;
 	
 	@Shadow
-	protected abstract void resetNodeAndStop();
+	protected abstract void timeoutPath();
 }

@@ -5,9 +5,9 @@ import org.spongepowered.asm.mixin.Shadow;
 
 
 @SuppressWarnings({"checkstyle:VisibilityModifier", "checkstyle:TypeName", "java:S101"})
-@Mixin(net.minecraft.entity.LivingEntity.class)
+@Mixin(net.minecraft.world.entity.LivingEntity.class)
 public abstract class RabbitEntity_LivingEntityMixin extends RabbitEntity_EntityMixin
 {
 	@Shadow
-	protected abstract float getJumpVelocity(final float strength);
+	protected abstract float getJumpPower(final float strength);
 }
