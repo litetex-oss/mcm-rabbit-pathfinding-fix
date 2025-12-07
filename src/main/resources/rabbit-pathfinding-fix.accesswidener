@@ -1,7 +1,7 @@
 accessWidener v2 named
-accessible class net/minecraft/world/entity/animal/Rabbit$RabbitMoveControl
+accessible class net/minecraft/world/entity/animal/rabbit/Rabbit$RabbitMoveControl
+accessible class net/minecraft/world/entity/animal/rabbit/Rabbit$RaidGardenGoal
 accessible field net/minecraft/world/entity/LivingEntity jumping Z
 accessible field net/minecraft/world/entity/Mob jumpControl Lnet/minecraft/world/entity/ai/control/JumpControl;
 accessible field net/minecraft/world/entity/ai/navigation/PathNavigation speedModifier D
-accessible class net/minecraft/world/entity/animal/Rabbit$RaidGardenGoal
 accessible field net/minecraft/world/entity/ai/goal/MoveToBlockGoal reachedTarget Z
