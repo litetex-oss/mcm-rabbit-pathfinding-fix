@@ -1,3 +1,6 @@
+# 1.1.0
+* Updated to 1.21.11
+
 # 1.0.8
 * Updated to 1.21.10
 * Use "official" mappings

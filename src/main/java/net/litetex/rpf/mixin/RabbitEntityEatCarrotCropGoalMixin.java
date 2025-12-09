@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.MoveToBlockGoal;
-import net.minecraft.world.entity.animal.Rabbit;
+import net.minecraft.world.entity.animal.rabbit.Rabbit;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CarrotBlock;
@@ -81,7 +81,7 @@ public abstract class RabbitEntityEatCarrotCropGoalMixin extends MoveToBlockGoal
 		method = "tick",
 		at = @At(
 			value = "INVOKE",
-			target = "Lnet/minecraft/world/entity/animal/Rabbit;level()Lnet/minecraft/world/level/Level;"
+			target = "Lnet/minecraft/world/entity/animal/rabbit/Rabbit;level()Lnet/minecraft/world/level/Level;"
 		),
 		cancellable = true
 	)
