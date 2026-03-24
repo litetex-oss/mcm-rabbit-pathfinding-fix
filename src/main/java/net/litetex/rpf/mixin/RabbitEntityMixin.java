@@ -28,12 +28,12 @@ public abstract class RabbitEntityMixin extends RabbitEntity_MobEntityMixin
 		cancellable = true)
 	public void getJumpVelocityOptimized(final CallbackInfoReturnable<Float> cir)
 	{
-		final float f;
+		final float baseJumpPower;
 		if(this.horizontalCollision
 			|| this.moveControl.hasWanted()
 			&& this.isYRequiringJump(this.moveControl.getWantedY()))
 		{
-			f = 0.5F;
+			baseJumpPower = 0.5F;
 		}
 		else
 		{
@@ -42,15 +42,15 @@ public abstract class RabbitEntityMixin extends RabbitEntity_MobEntityMixin
 				&& !path.isDone()
 				&& this.isYRequiringJump(path.getNextEntityPos(this.self()).y))
 			{
-				f = 0.5F;
+				baseJumpPower = 0.5F;
 			}
 			else
 			{
-				f = this.moveControl.getSpeedModifier() <= 0.6 ? 0.2F : 0.3F;
+				baseJumpPower = this.moveControl.getSpeedModifier() <= 0.6 ? 0.2F : 0.3F;
 			}
 		}
 		
-		cir.setReturnValue(this.getJumpPower(f / 0.42F));
+		cir.setReturnValue(this.getJumpPower(baseJumpPower / 0.42F));
 	}
 	
 	@Unique
