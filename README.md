@@ -42,7 +42,7 @@ Detailed [video comparisons](https://litetex-oss.github.io/mcm-rabbit-pathfindin
 Add the following to ``build.gradle``:
 ```groovy
 dependencies {
-    modImplementation 'net.litetex.mcm:rabbit-pathfinding-fix:<version>'
+    implementation 'net.litetex.mcm:rabbit-pathfinding-fix:<version>'
     // Further documentation: https://wiki.fabricmc.net/documentation:fabric_loom
 }
 ```
