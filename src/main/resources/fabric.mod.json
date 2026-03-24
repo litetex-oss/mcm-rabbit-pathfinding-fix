@@ -18,7 +18,7 @@
   "mixins": [
     "rabbit-pathfinding-fix.mixins.json"
   ],
-  "accessWidener": "rabbit-pathfinding-fix.accesswidener",
+  "accessWidener": "rabbit-pathfinding-fix.classtweaker",
   "recommends": {
     "fabricloader": ">=${loader_version}",
     "minecraft": ">=${minecraft_version}"
