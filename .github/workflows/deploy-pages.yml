@@ -29,13 +29,13 @@ jobs:
       - uses: actions/configure-pages@v6
 
       - run: |
-          mkdir .upload
-          mv assets/ .upload/assets/
+          mkdir tmp_upload
+          mv assets/ tmp_upload/assets/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
         with:
-          path: './upload'
+          path: './tmp_upload'
 
       - name: Deploy to GitHub Pages
         id: deployment
