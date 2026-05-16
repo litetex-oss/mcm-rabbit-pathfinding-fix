@@ -1,3 +1,6 @@
+# 1.3.0
+* Fix client-side rotation of Adults rabbit's head; see [MC-306682](https://mojira.dev/MC-306682)
+
 # 1.2.0
 * Updated to 26.1
 

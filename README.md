@@ -21,7 +21,7 @@ As of 1.21.1 there are multiple problems with rabbit pathfinding:
 
 <!-- modrinth_exclude.start -->
 > [!NOTE]<!-- modrinth_exclude.end -->
-> As of ``1.21.4/24w46a`` [MC-150224](https://bugs.mojang.com/browse/MC-150224) was fixed, correcting the jump height (1) and fixing the stall (2).<br/>
+> As of ``1.21.4/24w46a`` [MC-150224](https://mojira.dev/MC-150224) was fixed, correcting the jump height (1) and fixing the stall (2).<br/>
 > However all other parts - including optimizations and sanity checks in above mentioned fixes - are still missing.
 
 ### Eating carrot crops
@@ -29,6 +29,8 @@ As of 1.21.1 there are multiple problems with rabbit pathfinding:
 2. Rabbits eat the crop instantly even while still jumping and being in the air.
 3. The goal/behavior is immediately aborted (after a few ticks - when a target crop block was selected) due to incorrect implementation of ``shouldContinue`` and ``isTargetPos`` methods.
 
+### Other fixes
+* The client-side rotation of Adults rabbit's head is most of the time slightly upwards - [MC-306682](https://mojira.dev/MC-306682) affects 26.1 or later
 
 Detailed [video comparisons](https://litetex-oss.github.io/mcm-rabbit-pathfinding-fix/assets/comparison) are also available.
 
