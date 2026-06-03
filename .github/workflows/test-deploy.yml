@@ -58,6 +58,7 @@ jobs:
         if-no-files-found: error
 
     - name: Publish to Maven repositories
+      continue-on-error: true
       run: ./gradlew publish publishToSonatype closeAndReleaseSonatypeStagingRepository --info --stacktrace
       env:
         MAVEN_GPG_PRIVATE_KEY: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
