@@ -92,9 +92,15 @@ java {
 }
 
 javadoc {
-    options.addBooleanOption('html5', true)
-    options.addBooleanOption('Xdoclint:none', true)
-    options.addBooleanOption('quiet', true)
+    def opts = (options as StandardJavadocDocletOptions)
+    opts.addBooleanOption('html5', true)
+    opts.addBooleanOption('Xdoclint:none', true)
+    opts.addBooleanOption('quiet', true)
+    opts.tags(
+            "apiNote:a:API Note:",
+            "implSpec:a:Implementation Requirements:",
+            "implNote:a:Implementation Note:"
+    )
 }
 
 jar {
