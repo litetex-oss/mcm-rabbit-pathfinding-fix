@@ -6,7 +6,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.minecraft.core.Vec3i;
@@ -31,8 +33,6 @@ public abstract class EntityNavigationMixin
 	 * <p>
 	 * Ensured by setting currentNodeTimeout to a higher value then 0 when there is no movement.
 	 * </p>
-	 *
-	 * @see #resetNodeBreakInfinite(CallbackInfo)
 	 */
 	@Inject(
 		method = "doStuckDetection",
@@ -41,21 +41,21 @@ public abstract class EntityNavigationMixin
 			target = "Lnet/minecraft/world/level/pathfinder/Path;getNextNodePos()Lnet/minecraft/core/BlockPos;"),
 		cancellable = true
 	)
-	public void checkTimeoutsBreakInfinite(final Vec3 currentPos, final CallbackInfo ci)
+	public void checkTimeoutsBreakInfinite(final Vec3 mobPos, final CallbackInfo ci)
 	{
-		final Vec3i vec3i = this.path.getNextNodePos();
+		final Vec3i pos = this.path.getNextNodePos();
 		final long currentWorldTime = this.level.getGameTime();
-		if(vec3i.equals(this.timeoutCachedNode))
+		if(pos.equals(this.timeoutCachedNode))
 		{
 			this.timeoutTimer = this.timeoutTimer + (currentWorldTime - this.lastTimeoutCheck);
 		}
 		else
 		{
-			this.timeoutCachedNode = vec3i;
+			this.timeoutCachedNode = pos;
 			final float movementSpeed = this.mob.getSpeed();
 			this.timeoutLimit = movementSpeed > 0.0F
 				? Math.min(
-				currentPos.distanceTo(Vec3.atBottomCenterOf(this.timeoutCachedNode)) / movementSpeed * 20.0,
+				mobPos.distanceTo(Vec3.atBottomCenterOf(this.timeoutCachedNode)) / movementSpeed * 20.0,
 				MAX_NODE_TIMEOUT) // Set a max timeout to handle situations where movement speed is near zero
 				: DEFAULT_NODE_TIMEOUT; // Always set a timeout > 0 when speed is 0
 		}
@@ -71,13 +71,13 @@ public abstract class EntityNavigationMixin
 		ci.cancel();
 	}
 	
-	@Inject(
+	@ModifyConstant(
 		method = "resetStuckTimeout",
-		at = @At("TAIL")
+		constant = @Constant(doubleValue = 0.0d)
 	)
-	public void resetNodeBreakInfinite(final CallbackInfo ci)
+	double modifyTimeout(final double constant)
 	{
-		this.timeoutLimit = DEFAULT_NODE_TIMEOUT;
+		return DEFAULT_NODE_TIMEOUT;
 	}
 	
 	@Shadow

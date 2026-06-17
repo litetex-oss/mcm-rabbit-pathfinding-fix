@@ -9,5 +9,5 @@ import org.spongepowered.asm.mixin.Shadow;
 public abstract class RabbitEntity_LivingEntityMixin extends RabbitEntity_EntityMixin
 {
 	@Shadow
-	protected abstract float getJumpPower(final float strength);
+	protected abstract float getJumpPower(final float multiplier);
 }

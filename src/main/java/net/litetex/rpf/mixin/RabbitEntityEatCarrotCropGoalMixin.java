@@ -122,7 +122,7 @@ public abstract class RabbitEntityEatCarrotCropGoalMixin extends MoveToBlockGoal
 		cancellable = true
 	)
 	public void isTargetPosDoNotAbortWhenHavingTarget(
-		final LevelReader world,
+		final LevelReader level,
 		final BlockPos pos,
 		final CallbackInfoReturnable<Boolean> cir)
 	{
@@ -132,10 +132,10 @@ public abstract class RabbitEntityEatCarrotCropGoalMixin extends MoveToBlockGoal
 			return;
 		}
 		
-		BlockState blockState = world.getBlockState(pos);
+		BlockState blockState = level.getBlockState(pos);
 		if(blockState.is(Blocks.FARMLAND))
 		{
-			blockState = world.getBlockState(pos.above());
+			blockState = level.getBlockState(pos.above());
 			if(blockState.getBlock() instanceof final CarrotBlock carrotsBlock && carrotsBlock.isMaxAge(blockState))
 			{
 				cir.setReturnValue(true);
