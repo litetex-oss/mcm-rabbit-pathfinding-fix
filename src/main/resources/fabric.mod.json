@@ -16,9 +16,9 @@
   "icon": "assets/icon.png",
   "environment": "*",
   "mixins": [
-    "template-placeholder.mixins.json"
+    "rabbit-pathfinding-fix.mixins.json"
   ],
-  "accessWidener": "template-placeholder.classtweaker",
+  "accessWidener": "rabbit-pathfinding-fix.classtweaker",
   "recommends": {
     "fabricloader": ">=${loader_version}",
     "minecraft": ">=${minecraft_version}"
